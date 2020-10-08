@@ -99,4 +99,42 @@ public class RNZendeskBridge extends ReactContextBaseJavaModule {
         hcaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getReactApplicationContext().startActivity(hcaIntent);
     }
+
+    @ReactMethod
+    public void showCreateTicket(ReadableMap options) {
+        ArrayList tags = options.hasKey("tags") ? options.getArray("tags").toArrayList() : new ArrayList();
+        String subject = options.hasKey("subject") ? options.getString("subject") : "";
+        boolean enableContactUs = !(options.hasKey("hideContactSupport") && options.getBoolean("hideContactSupport"));
+
+        UiConfig requestActivityConfig = RequestActivity.builder()
+            .withRequestSubject(subject)
+            .withTags(tags)
+            .config();
+
+        Builder builder = HelpCenterActivity.builder()
+            .withContactUsButtonVisible(enableContactUs);
+
+        int groupType = options.hasKey("groupType") ? options.getInt("groupType") : 0;
+        ArrayList<Double> groupIds = options.hasKey("groupIds") ? options.getArray("groupIds").toArrayList() : new ArrayList();
+        ArrayList<Long> longGroupIds = new ArrayList();
+
+        for (int i = 0; i < groupIds.size(); i++) {
+            longGroupIds.add(groupIds.get(i).longValue());
+        }
+
+        switch(groupType) {
+            case 1: {
+                builder.withArticlesForSectionIds(longGroupIds);
+                break;
+            }
+            case 2: {
+                builder.withArticlesForCategoryIds(longGroupIds);
+                break;
+            }
+        }
+
+        Intent hcaIntent = builder.intent(getReactApplicationContext(), requestActivityConfig);
+        hcaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getReactApplicationContext().startActivity(hcaIntent);
+    }
 }
