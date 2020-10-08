@@ -72,4 +72,22 @@ class RNZendesk: RCTEventEmitter {
             UIApplication.shared.keyWindow?.rootViewController?.present(uiNavigationController, animated: true, completion: nil)
         }
     }
+
+    @objc(showCreateTicket:)
+    func showCreateTicket(with options: [String: Any]) {
+        DispatchQueue.main.async {
+            let config = RequestUiConfiguration()
+
+            if let tags = options["tags"] as? [String] {
+                config.tags = tags
+            }
+            config.subject = (options["subject"] as? String) ?? ""
+            
+            //Present the SDK
+            let requestScreen = RequestUi.buildRequestUi(with: [config])
+            let uiNavigationController = UINavigationController(rootViewController: requestScreen)
+            uiNavigationController.modalPresentationStyle = .fullScreen
+            UIApplication.shared.keyWindow?.rootViewController?.present(uiNavigationController, animated: true, completion: nil)
+        }
+    }
 }
