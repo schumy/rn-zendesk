@@ -61,3 +61,14 @@ export function identifyAnonymous(name?: string, email?: string) {
 export function showHelpCenter(options: HelpCenterOptions) {
   RNZendesk.showHelpCenter(options);
 }
+
+/**
+ * launch ticket screen
+ * Note: zendesk should be initialized before accessing `showCreateTicket`
+ *
+ * @param options
+ */
+export function showCreateTicket(options: HelpCenterOptions) {
+  RNZendesk.showCreateTicket(options);
+}
+
