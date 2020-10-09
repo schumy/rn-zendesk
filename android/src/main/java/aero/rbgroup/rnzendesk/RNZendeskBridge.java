@@ -76,34 +76,9 @@ public class RNZendeskBridge extends ReactContextBaseJavaModule {
         Builder builder = HelpCenterActivity.builder()
             .withContactUsButtonVisible(enableContactUs);
 
-        int groupType = options.hasKey("groupType") ? options.getInt("groupType") : 0;
-        ArrayList<Double> groupIds = options.hasKey("groupIds") ? options.getArray("groupIds").toArrayList() : new ArrayList();
-        ArrayList<Long> longGroupIds = new ArrayList();
-
-        for (int i = 0; i < groupIds.size(); i++) { 
-            longGroupIds.add(convertToLong(groupIds.get(i))); 
-        }
-
-        switch(groupType) {
-            case 1: {
-                builder.withArticlesForSectionIds(longGroupIds);
-                break;
-            }
-            case 2: {
-                builder.withArticlesForCategoryIds(longGroupIds);
-                break;
-            }
-        }
-
         Intent hcaIntent = builder.intent(getReactApplicationContext(), requestActivityConfig);
         hcaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getReactApplicationContext().startActivity(hcaIntent);
-    }
-
-    public static Long convertToLong(Object o){ 
-        String stringToConvert = String.valueOf(o); 
-        Long convertedLong = Long.parseLong(stringToConvert); 
-        return convertedLong; 
     }
 
     @ReactMethod
@@ -112,12 +87,11 @@ public class RNZendeskBridge extends ReactContextBaseJavaModule {
         String subject = options.hasKey("subject") ? options.getString("subject") : "";
         boolean enableContactUs = !(options.hasKey("hideContactSupport") && options.getBoolean("hideContactSupport"));
 
-        UiConfig requestActivityConfig = RequestActivity.builder()
+        Intent hcaIntent = RequestActivity.builder()
             .withRequestSubject(subject)
             .withTags(tags)
-            .config();
+            .intent(getReactApplicationContext());
 
-        Intent hcaIntent = requestActivityConfig.intent(getReactApplicationContext());
         hcaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getReactApplicationContext().startActivity(hcaIntent);
     }
