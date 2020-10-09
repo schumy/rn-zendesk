@@ -73,31 +73,35 @@ public class RNZendeskBridge extends ReactContextBaseJavaModule {
             .withTags(tags)
             .config();
 
-        Builder builder = HelpCenterActivity.builder()
-            .withContactUsButtonVisible(enableContactUs);
+        // Builder builder = HelpCenterActivity.builder()
+        //     .withContactUsButtonVisible(enableContactUs);
 
-        int groupType = options.hasKey("groupType") ? options.getInt("groupType") : 0;
-        ArrayList<Double> groupIds = options.hasKey("groupIds") ? options.getArray("groupIds").toArrayList() : new ArrayList();
-        ArrayList<Long> longGroupIds = new ArrayList();
+        // int groupType = options.hasKey("groupType") ? options.getInt("groupType") : 0;
+        // ArrayList<Double> groupIds = options.hasKey("groupIds") ? options.getArray("groupIds").toArrayList() : new ArrayList();
+        // ArrayList<Long> longGroupIds = new ArrayList();
 
-        for (int i = 0; i < groupIds.size(); i++) {
-            longGroupIds.add(groupIds.get(i).longValue());
-        }
+        // for (int i = 0; i < groupIds.size(); i++) {
+        //     longGroupIds.add(groupIds.get(i).longValue());
+        // }
 
-        switch(groupType) {
-            case 1: {
-                builder.withArticlesForSectionIds(longGroupIds);
-                break;
-            }
-            case 2: {
-                builder.withArticlesForCategoryIds(longGroupIds);
-                break;
-            }
-        }
+        // switch(groupType) {
+        //     case 1: {
+        //         builder.withArticlesForSectionIds(longGroupIds);
+        //         break;
+        //     }
+        //     case 2: {
+        //         builder.withArticlesForCategoryIds(longGroupIds);
+        //         break;
+        //     }
+        // }
 
-        Intent hcaIntent = builder.intent(getReactApplicationContext(), requestActivityConfig);
+        Intent hcaIntent = requestActivityConfig.intent(getReactApplicationContext());
         hcaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getReactApplicationContext().startActivity(hcaIntent);
+
+        // Intent requestActivityIntent = RequestActivity.builder()
+        // .withRequestSubject("Android ticket")
+        // .intent(MyActivity.this);
     }
 
     @ReactMethod
